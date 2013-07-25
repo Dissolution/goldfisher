@@ -48,19 +48,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Jay">
-      <HintPath>C:\Projects\Jay\Jay\bin\Release\Jay.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cards\Base\Card.cs" />
@@ -86,6 +77,7 @@
     <Compile Include="Enumerations\CardType.cs" />
     <Compile Include="Enumerations\Usage.cs" />
     <Compile Include="Enumerations\WinConditionType.cs" />
+    <Compile Include="Extensions\AllExtensions.cs" />
     <Compile Include="Fishers\DefaultFisher.cs" />
     <Compile Include="Fishers\Decklist.cs" />
     <Compile Include="Form1.cs">

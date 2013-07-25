@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Jay;
 
 namespace Goldfisher
 {
@@ -36,12 +35,12 @@ namespace Goldfisher
 			Empty.ToList().ForEach(e => totals += e);
 
 			var text = new StringBuilder();
-			text.AppendLine("Belcher win: {0}%".FormatWith(JayMath.Percent(BelcherWin, totals)));
-			text.AppendLine("Belcher drop: {0}%".FormatWith(JayMath.Percent(BelcherDrop, totals)));
+		    text.AppendLine("Belcher win: {0}%".FormatWith(100*BelcherWin/totals));
+		    text.AppendLine("Belcher drop: {0}%".FormatWith(100*BelcherDrop/totals));
 			text.AppendLine("Empty the Warrens:");
 			for (var i = 0; i < 20; i++)
 			{
-				text.AppendLine("{0}: {1}%".FormatWith(i*2, JayMath.Percent(Empty[i], totals)));
+				text.AppendLine("{0}: {1}%".FormatWith(i*2, 100*Empty[i]/ totals));
 			}
 
 			return text.ToString();

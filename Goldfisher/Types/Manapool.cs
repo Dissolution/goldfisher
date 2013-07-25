@@ -1,5 +1,4 @@
 ﻿using System;
-using Jay;
 using System.Linq;
 
 namespace Goldfisher
@@ -48,7 +47,7 @@ namespace Goldfisher
 			: base(mana)
 		{
 			_baseColors = new[] {Color.White, Color.Blue, Color.Black, Color.Red, Color.Green};
-			_mana[Color.Any] = mana.CountChar('*');
+		    _mana[Color.Any] = mana.Count(c => c == '*');
 		}
 		#endregion
 

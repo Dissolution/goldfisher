@@ -1,6 +1,4 @@
-﻿using Jay;
-
-namespace Goldfisher
+﻿namespace Goldfisher
 {
 	public class ElvishSpiritGuide : Card
 	{

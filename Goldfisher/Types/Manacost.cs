@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using Jay;
+using System;
 
 namespace Goldfisher
 {
@@ -58,9 +59,9 @@ namespace Goldfisher
 		#region Constructors
 		public Manacost()
 		{
-			foreach (var color in EnumExtensions.GetValues<Color>())
+			foreach (var color in Enum.GetValues(typeof(Color)))
 			{
-				_mana.Add(color, 0);
+				_mana.Add((Color)color, 0);
 			}
 		}
 
@@ -68,14 +69,14 @@ namespace Goldfisher
 			: this()
 		{
 			castingCost = castingCost.ToUpper();
-			var numbers = castingCost.Numbers();
-			if (!numbers.IsJunk())
-				_mana[Color.None] = numbers.ToInt();
-			_mana[Color.White] = castingCost.CountChar('W');
-			_mana[Color.Blue] = castingCost.CountChar('U');
-			_mana[Color.Black] = castingCost.CountChar('B');
-			_mana[Color.Red] = castingCost.CountChar('R');
-			_mana[Color.Green] = castingCost.CountChar('G');
+		    var numbers = new string(castingCost.Where(char.IsNumber).ToArray());
+		    if (!string.IsNullOrWhiteSpace(numbers))
+		        _mana[Color.None] = Convert.ToInt32(numbers);
+			_mana[Color.White] = castingCost.Count(c => c == 'W');
+            _mana[Color.Blue] = castingCost.Count(c => c == 'U');
+            _mana[Color.Black] = castingCost.Count(c => c == 'B');
+            _mana[Color.Red] = castingCost.Count(c => c == 'R');
+            _mana[Color.Green] = castingCost.Count(c => c == 'G');
 		}
 		#endregion
 

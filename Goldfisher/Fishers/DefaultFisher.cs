@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Jay;
 
 namespace Goldfisher
 {
@@ -27,16 +26,14 @@ namespace Goldfisher
 			{
 				//Copy the state for this sim
 				var state = new BoardState(library);
-				state.Library.Randomize();
+			    state.Shuffle();
 				state.DrawCards(7);
 
-                state.Hand.Clear();
-			    state.Hand.AddRange(new LotusPetal(), new RiteOfFlame(), new RiteOfFlame(), new EmptyTheWarrens(),
-			                        new LionsEyeDiamond(), new GoblinCharbelcher());
+                //state.Hand.Clear();
+                //state.Hand.AddRange(new LotusPetal(), new RiteOfFlame(), new RiteOfFlame(), new EmptyTheWarrens(),
+                //                    new LionsEyeDiamond(), new GoblinCharbelcher());
 
 				Mulligan(state);
-
-			    var hash = JayMath.CreateHash(state.Hand.OrderBy(c => c.Name));
 
 				//Start casting
 				state = Play(state);
@@ -85,23 +82,23 @@ namespace Goldfisher
 
 			var text = new StringBuilder();
 			var failures = results.Count(r => r.Item1 == WinConditionType.None);
-			text.AppendLine("Failures: {0} ({1}%)".FormatWith(failures, JayMath.Percent(failures, sims)));
+			text.AppendLine("Failures: {0} ({1}%)".FormatWith(failures, 100*failures/ sims));
 
 			var belches = results.Count(r => r.Item1 == WinConditionType.Belcher);
-			text.AppendLine("Belches: {0} ({1}%)".FormatWith(belches, JayMath.Percent(belches, sims)));
+			text.AppendLine("Belches: {0} ({1}%)".FormatWith(belches, 100*belches/ sims));
 			var bDrops = results.Count(r => r.Item1 == WinConditionType.Belcher && r.Item2 == -1);
-			text.AppendLine("Drop Only: {0} ({1}%)".FormatWith(bDrops, JayMath.Percent(bDrops, belches)));
+			text.AppendLine("Drop Only: {0} ({1}%)".FormatWith(bDrops, 100*bDrops/ belches));
 			var bFails = results.Count(r => r.Item1 == WinConditionType.Belcher && r.Item2 >= 0 && r.Item2 < 20);
-			text.AppendLine("<20 Damage: {0} ({1}%)".FormatWith(bFails, JayMath.Percent(bFails, belches)));
+			text.AppendLine("<20 Damage: {0} ({1}%)".FormatWith(bFails, 100*bFails/ belches));
 			var bKills = results.Count(r => r.Item1 == WinConditionType.Belcher && r.Item2 >= 20);
-			text.AppendLine("20+ Damage: {0} ({1}%)".FormatWith(bKills, JayMath.Percent(bKills, belches)));
+			text.AppendLine("20+ Damage: {0} ({1}%)".FormatWith(bKills, 100*bKills/ belches));
 
 			var empties = results.Count(r => r.Item1 == WinConditionType.Empty);
-			text.AppendLine("Empties: {0} ({1}%)".FormatWith(empties, JayMath.Percent(empties, sims)));
+			text.AppendLine("Empties: {0} ({1}%)".FormatWith(empties, 100*empties/ sims));
 			for (var t = 2; t <= 36; t += 2)
 			{
 				var e = results.Count(r => r.Item1 == WinConditionType.Empty && r.Item2 == t);
-				text.AppendLine("{0} tokens: {1} ({2}%)".FormatWith(t, e, JayMath.Percent(e, empties)));
+				text.AppendLine("{0} tokens: {1} ({2}%)".FormatWith(t, e, 100*e/ empties));
 			}
 
 			MessageBox.Show(text.ToString());
@@ -215,7 +212,7 @@ namespace Goldfisher
 			{
 				//Get first by prority
 				var card = boardState.Hand.OrderBy(h => h.Priority).Skip(skip).FirstOrDefault();
-				if (card.IsDefault())
+				if (card == null)
 					break;
 
 				if (card.CanCast(boardState))

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Jay;
 
 namespace Goldfisher
 {
@@ -69,12 +68,17 @@ namespace Goldfisher
 			return cards;
 		}
 
+        public void Shuffle()
+        {
+            this.Library = Library.AsRandomized().ToList();
+        }
+
 		public void Mulligan()
 		{
 			var cards = Hand.Count;
-			Library.AddRange(Hand.Copy());
+		    Library.AddRange(Hand);
 			Hand.Clear();
-			Library.Randomize();
+			Shuffle();
 			DrawCards(cards - 1);
 			Log("Mulliganned to {0}".FormatWith(cards-1));
 		}
