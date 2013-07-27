@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Goldfisher.Cards;
 
 namespace Goldfisher
 {
@@ -11,7 +12,7 @@ namespace Goldfisher
 	{
 		public DefaultFisher()
 		{
-			var library = Decklist.MyList();
+		    var library = Decklists.BestFound();
 
 			//Prime the results
 			//Win Con Type, # of that type (damage/tokens), times happened
@@ -24,21 +25,50 @@ namespace Goldfisher
 			//Number of simulations
 			for (var h = 0; h < sims; h++)
 			{
-				//Copy the state for this sim
+				//Create a new boardstate for this simulation.
 				var state = new BoardState(library);
+
+                //Shuffle + draw opening hand.
 			    state.Shuffle();
 				state.DrawCards(7);
 
-                //state.Hand.Clear();
-                //state.Hand.AddRange(new LotusPetal(), new RiteOfFlame(), new RiteOfFlame(), new EmptyTheWarrens(),
-                //                    new LionsEyeDiamond(), new GoblinCharbelcher());
+                #region Testing Specific Hands
+                //boardState.Hand.Clear();
+                //boardState.Hand.AddRange(new LotusPetal(), 
+                //                    new RiteOfFlame(), 
+                //                    new RiteOfFlame(), 
+                //                    new EmptyTheWarrens(),
+                //                    new LionsEyeDiamond(), 
+                //                    new GoblinCharbelcher());
+                #endregion
 
-				Mulligan(state);
+                //Loop until we mull to death or get a 'win'.
+                while (state.WinConditionType == WinConditionType.None && state.Hand.Any())
+			    {
+                    //Perform simple mulligan check.
+			        Mulligan(state);
 
-				//Start casting
-				state = Play(state);
+                    //If we're out of cards, we failed. Exit
+			        if (!state.Hand.Any())
+			            break;
 
-				//Check our win condition
+                    //Copy this state so we can go back if we fail.
+			        var origState = state.Copy();
+
+			        //Start casting
+			        state = Play(state);
+
+			        //If we didn't have a wincondition, reset (should've mulliganned)
+			        if (state.WinConditionType == WinConditionType.None)
+			        {
+                        //Reset state
+			            state = origState;
+                        //Force mulligan
+                        state.Mulligan();
+			        }
+			    }
+
+			    //Check our win condition
 				if (state.WinConditionType == WinConditionType.Empty)
 				{
 					var tokens = state.Storm * 2;
@@ -73,7 +103,7 @@ namespace Goldfisher
 				}
 				else
 				{
-					//Did not win
+					//Did not win (fizzle)
 					results.Add(WinConditionType.None, 0, state);
 				}
 			}
@@ -105,44 +135,61 @@ namespace Goldfisher
 		}
 
 		#region Private Methods
-		private List<Card> LoadBelcher()
-		{
-			var deck = new List<Card>();
-			for (var i = 0; i < 4; i++)
-			{
-				if (i == 0)
-				{
-					deck.Add(new Taiga());
-				}
-				else
-				{
-					deck.Add(new EmptyTheWarrens());
-				}
 
-				deck.Add(new GitaxianProbe());
-				deck.Add(new StreetWraith());
+	    /// <summary>
+	    /// Simulate the entire hand's ramp to determine what mana we can end up with.
+	    /// This WILL NOT take into account Desperate Ritual splice or Rite of Flame multiples.
+	    /// NOR Chrome Mox.
+	    /// </summary>
+	    /// <param name="boardState"></param>
+	    /// <returns></returns>
+	    private Manapool DoRamp(BoardState boardState)
+        {
+            var state = boardState.Copy();
+            var skip = 0;
 
-				deck.Add(new LotusPetal());
-				deck.Add(new SimianSpiritGuide());
-				deck.Add(new ElvishSpiritGuide());
-				deck.Add(new LandGrant());
-				deck.Add(new ChromeMox());
+            //Do Land Grant
+            if (state.Hand.Any(c => c.Name == "Land Grant") && 
+                state.Hand.All(c => c.Name != "Taiga"))
+            {
+                state.Manapool.Add("*");      //From Taiga
+            }
 
-				deck.Add(new Manamorphose());
-				//deck.Add(new DesperateRitual());
-				deck.Add(new RiteOfFlame());
-				//deck.Add(new PyreticRitual());
-				deck.Add(new SeethingSong());
-				deck.Add(new TinderWall());
+            while (true)
+            {
+                //Get first manasource by priority
+                var card = state.Hand.Where(c => c is ManaSource && c.Name != "Chrome Mox")
+                               .OrderBy(c => c.Priority)
+                               .Skip(skip)
+                               .FirstOrDefault() as ManaSource;
+                if (card == null)
+                {
+                    //No more cards to resolve, exit.
+                    break;
+                }
 
-				deck.Add(new LionsEyeDiamond());
-				deck.Add(new GoblinCharbelcher());
-				deck.Add(new BurningWish());
-			}
+                if (card.CanCast(state))
+                {
+                    card.Resolve(state);
+                    skip = 0;
+                }
+                else
+                {
+                    skip += 1;
+                }
 
-			return deck;
-		}
+                //Check if we can't cast anything
+                if (skip >= state.Hand.Count)
+                    break;
+            }
 
+            return state.Manapool;
+        }
+
+        /// <summary>
+        /// Perform necessary mulligans
+        /// </summary>
+        /// <param name="state"></param>
 		private void Mulligan(BoardState state)
 		{
 			while (state.Hand.Any())
@@ -154,46 +201,32 @@ namespace Goldfisher
 					continue;
 				}
 
-				//Check 2 - Does the hand have initial mana to ramp to first mana?
-                var addMana = 0;
-                var mulliganned = false;
-                for (var startMana = 0; startMana <= 3; startMana++)
-                {
-                    if (addMana < startMana)
-                    {
-                        state.Mulligan();
-                        mulliganned = true;
-                        break;
-                    }
-                
-                    addMana += state.Hand.Where(c => c.StartMana == startMana).Sum(c => c.AddMana);
-				}
+                ////Check 2 - Does the hand have enough mana to ramp to it's win condition?
+                //var addmana = DoRamp(state).Total;
+                //var ledmana = state.Hand.Count(c => c.Name == "Lion's Eye Diamond")*3;
+                //if ((state.Hand.Any(c => c.Name == "Goblin Charbelcher") && addmana >= 4) ||
+                //    (state.Hand.Any(c => c.Name == "Burning Wish") && addmana >= 2 && addmana + ledmana >= 6) ||
+                //    (state.Hand.Any(c => c.Name == "Empty the Warrens") && addmana >= 4))
+                //{
+                //    //This hand is okay
+                //}
+                //else
+                //{
+                //    //Mull
+                //    state.Mulligan();
+                //    continue;
+                //}
 
-                if (mulliganned)
-                {
-                    mulliganned = false;
-                    continue;
-                }
-
-				//Check 3 - Check for enough mana to wincon
-				var mana = state.Hand.Sum(c => c.AddMana);
-				if ((state.Hand.Any(c => c.Name == "Empty the Warrens") && mana >= 4) ||
-				    (state.Hand.Any(c => c.Name == "Goblin Charbelcher") && mana >= 4) ||
-				    (state.Hand.Any(c => c.Name == "Burning Wish") &&
-				     (mana >= 2) && (mana + (state.Hand.Count(c => c.Name == "Lion's Eye Diamond")*3) >= 6)))
-				{
-					//Okay!
-				}
-				else
-				{
-					state.Mulligan();
-					continue;
-				}
-
+                //Checked out
 				break;
 			}
 		}
 
+        /// <summary>
+        /// Play this hand.
+        /// </summary>
+        /// <param name="boardState"></param>
+        /// <returns></returns>
 		private BoardState Play(BoardState boardState)
 		{
 			var skip = 0;
@@ -211,7 +244,10 @@ namespace Goldfisher
 			while (true)
 			{
 				//Get first by prority
-				var card = boardState.Hand.OrderBy(h => h.Priority).Skip(skip).FirstOrDefault();
+				var card = boardState.Hand
+                    .OrderBy(h => h.Priority)
+                    .Skip(skip)
+                    .FirstOrDefault();
 				if (card == null)
 					break;
 
@@ -225,13 +261,16 @@ namespace Goldfisher
 					skip += 1;
 				}
 
+                //Check if we can't cast anything
 				if (skip >= boardState.Hand.Count)
 					break;
+
+                //Check if we've hit our win condition
 				if (boardState.WinConditionType != WinConditionType.None)
 					break;
 			}
 
-			//Done!?
+			//Done
 			return boardState;
 		}
 		#endregion

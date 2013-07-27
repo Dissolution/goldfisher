@@ -1,14 +1,16 @@
-﻿namespace Goldfisher
+﻿namespace Goldfisher.Cards
 {
-	public class Taiga : Card
+	public class Taiga : ManaSource
 	{
 		public Taiga()
 		{
-			this.Name = "Taiga";
-			this.Type = CardType.InitialMana;
+			Name = "Taiga";
+			Type = CardType.InitialMana;
+            Color = Color.None;
+		    Cost = Manacost.None;
+            Produces = new Manapool("*");       //Technically Red or Green, but we only have two colors, so treat as Any.
 
-			this.Priority = .1m;		//Very early
-			this.EndMana = 1;
+		    Priority = 0.1m;        //First
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -22,7 +24,7 @@
 			boardState.Hand.Remove(this);
 
 			//Get effect
-			boardState.Manapool.Add("*");		//Technically not Any
+			boardState.Manapool.Add(Produces);
 
 			//Finish Resolution
 			boardState.Battlefield.Add(this);

@@ -1,18 +1,16 @@
-﻿using System.Linq;
-using Goldfisher.Cards;
-
-namespace Goldfisher
+﻿namespace Goldfisher.Cards
 {
-	public class GoblinCharbelcher : Card
+	public class TinderWall : ManaSource
 	{
-		public GoblinCharbelcher()
+        public TinderWall()
 		{
-			Name = "Goblin Charbelcher";
-			Type = CardType.WinCon;
-            Color = Color.None;
-			Cost = new Manacost("4");
+			Name = "Tinder Wall";
+			Type = CardType.Ramp;
+			Color = Color.Green;
+			Cost = new Manacost("G");
+            Produces = new Manapool("RR");
 
-			Priority = 2.2m;		//WinCon
+			Priority = .9m;		//Before other initials, as it uses Green (harder to get)
 		}
 
 
@@ -28,9 +26,9 @@ namespace Goldfisher
             boardState.Hand.Remove(this);
 
             //Resolve
+            boardState.Manapool.Add(Produces);
             boardState.Storm += 1;
-            boardState.Battlefield.Add(this);
-            boardState.WinConditionType = WinConditionType.Belcher;
+            boardState.Graveyard.Add(this);
 
             //Log
             boardState.Log(Usage.Cast, this);

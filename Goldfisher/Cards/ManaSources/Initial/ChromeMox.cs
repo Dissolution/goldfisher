@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Goldfisher
+namespace Goldfisher.Cards
 {
-	public class ChromeMox : Card
+	public class ChromeMox : ManaSource
 	{
 		public ChromeMox()
 		{
-			this.Name = "Chrome Mox";
-			this.Type = CardType.InitialMana;
+			Name = "Chrome Mox";
+			Type = CardType.InitialMana;
+            Color = Color.None;
+		    Cost = Manacost.None;
+		    Produces = Manapool.Empty;      //Treat as if it produces nothing
 
-			this.Priority = .2m;
-			this.EndMana = 1;
+		    Priority = .2m;     //Very early
 		}
 
 		public override bool CanCast(BoardState boardState)

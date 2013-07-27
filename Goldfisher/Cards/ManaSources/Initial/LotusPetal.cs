@@ -1,14 +1,16 @@
-﻿namespace Goldfisher
+﻿namespace Goldfisher.Cards
 {
-	public sealed class LotusPetal : Card
+	public sealed class LotusPetal : ManaSource
 	{
 		public LotusPetal()
 		{
-			this.Name = "Lotus Petal";
-			this.Type = CardType.InitialMana;
+			Name = "Lotus Petal";
+			Type = CardType.InitialMana;
+            Color = Color.None;
+		    Cost = Manacost.None;
+            Produces = new Manapool("*");
 
-			this.Priority = .5m;		//Early
-			this.EndMana = 1;
+		    Priority = 0.5m;        //Early
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -22,7 +24,7 @@
 			boardState.Hand.Remove(this);
 
 			//Get effect
-			boardState.Manapool.Add("*");		//Any
+			boardState.Manapool.Add(Produces);
 			boardState.Storm += 1;
 
 			//Finish Resolution

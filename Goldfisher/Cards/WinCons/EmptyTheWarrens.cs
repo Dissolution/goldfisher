@@ -1,17 +1,17 @@
 ﻿using System.Linq;
 
-namespace Goldfisher
+namespace Goldfisher.Cards
 {
 	public class EmptyTheWarrens : Card
 	{
 		public EmptyTheWarrens()
 		{
-			this.Name = "Empty the Warrens";
-			this.Type = CardType.WinCon;
-			this.Color = Color.Red;
-			this.Cost = new Manacost("3R");
+			Name = "Empty the Warrens";
+			Type = CardType.WinCon;
+			Color = Color.Red;
+			Cost = new Manacost("3R");
 
-			this.Priority = 2.0m;		//WinCon
+			Priority = 2.0m;		//WinCon
 		}
 
 
@@ -31,16 +31,14 @@ namespace Goldfisher
 
 		public override void Resolve(BoardState boardState)
 		{
-			//Put on stack and pay costs
-			boardState.Hand.Remove(this);
-			boardState.Manapool.Pay(Cost);
+            //Pay costs, put on stack.
+            boardState.Manapool.Pay(Cost);
+            boardState.Hand.Remove(this);
 
-			//Get effect
+            //Resolve
+            boardState.Storm += 1;
+            boardState.Graveyard.Add(this);
 			boardState.WinConditionType = WinConditionType.Empty;
-			boardState.Storm += 1;
-
-			//Finish resolution
-			boardState.Graveyard.Add(this);
 
 			//Log
 			boardState.Log(Usage.Cast, this, "Storm {0}".FormatWith(boardState.Storm));

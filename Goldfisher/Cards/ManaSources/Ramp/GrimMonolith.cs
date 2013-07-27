@@ -1,20 +1,17 @@
-﻿using System.Linq;
-using Goldfisher.Cards;
-
-namespace Goldfisher
+﻿namespace Goldfisher.Cards
 {
-	public class GoblinCharbelcher : Card
+	public class GrimMonolith : ManaSource
 	{
-		public GoblinCharbelcher()
+		public GrimMonolith()
 		{
-			Name = "Goblin Charbelcher";
-			Type = CardType.WinCon;
+			Name = "Grim Monolith";
+			Type = CardType.Ramp;
             Color = Color.None;
-			Cost = new Manacost("4");
+			Cost = new Manacost("2");
+            Produces = new Manapool("3");
 
-			Priority = 2.2m;		//WinCon
+			Priority = 1.75m;		//After other ramps (don't want to eat up mana for colorless)
 		}
-
 
 		public override bool CanCast(BoardState boardState)
 		{
@@ -28,9 +25,9 @@ namespace Goldfisher
             boardState.Hand.Remove(this);
 
             //Resolve
+            boardState.Manapool.Add(Produces);
             boardState.Storm += 1;
-            boardState.Battlefield.Add(this);
-            boardState.WinConditionType = WinConditionType.Belcher;
+            boardState.Graveyard.Add(this);
 
             //Log
             boardState.Log(Usage.Cast, this);

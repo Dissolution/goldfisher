@@ -1,20 +1,17 @@
-﻿using System.Linq;
-using Goldfisher.Cards;
-
-namespace Goldfisher
+﻿namespace Goldfisher.Cards
 {
-	public class GoblinCharbelcher : Card
+	public class SeethingSong : ManaSource
 	{
-		public GoblinCharbelcher()
+		public SeethingSong()
 		{
-			Name = "Goblin Charbelcher";
-			Type = CardType.WinCon;
-            Color = Color.None;
-			Cost = new Manacost("4");
+			Name = "Seething Song";
+			Type = CardType.Ramp;
+			Color = Color.Red;
+			Cost = new Manacost("2R");
+            Produces = new Manapool("RRRRR");
 
-			Priority = 2.2m;		//WinCon
+            Priority = 1.5m;		//After other ramp, to not eat Green
 		}
-
 
 		public override bool CanCast(BoardState boardState)
 		{
@@ -28,9 +25,9 @@ namespace Goldfisher
             boardState.Hand.Remove(this);
 
             //Resolve
+            boardState.Manapool.Add(Produces);
             boardState.Storm += 1;
-            boardState.Battlefield.Add(this);
-            boardState.WinConditionType = WinConditionType.Belcher;
+            boardState.Graveyard.Add(this);
 
             //Log
             boardState.Log(Usage.Cast, this);

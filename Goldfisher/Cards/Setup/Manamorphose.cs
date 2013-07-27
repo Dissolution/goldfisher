@@ -1,0 +1,45 @@
+﻿using System.Linq;
+
+namespace Goldfisher.Cards
+{
+	public class Manamorphose : ManaSource
+	{
+		private readonly Manacost _secondCost;
+
+		public Manamorphose()
+		{
+			Name = "Manamorphose";
+			Type = CardType.Draw;
+			Color = Color.Red | Color.Green;
+			
+            Cost = new Manacost("1R");
+			_secondCost = new Manacost("1G");
+
+            Produces = new Manapool("**");
+
+			Priority = 1.1m;		//After tinder wall's G
+		}
+
+		public override bool CanCast(BoardState boardState)
+		{
+			return (boardState.Manapool.CanPay(Cost) ||
+			        boardState.Manapool.CanPay(_secondCost));
+		}
+
+		public override void Resolve(BoardState boardState)
+		{
+            //Pay costs, put on stack.
+		    boardState.Manapool.Pay(boardState.Manapool.CanPay(Cost) ? Cost : _secondCost);
+            boardState.Hand.Remove(this);
+
+            //Resolve
+		    boardState.Manapool.Add(Produces);
+            var drawn = boardState.DrawCards(1).First();
+            boardState.Storm += 1;
+            boardState.Graveyard.Add(this);
+
+            //Log
+            boardState.Log(Usage.Cast, this, "Draw {0}".FormatWith(drawn));
+		}
+	}
+}

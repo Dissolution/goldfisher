@@ -1,18 +1,17 @@
 ﻿using System.Linq;
 
-namespace Goldfisher
+namespace Goldfisher.Cards
 {
 	public class StreetWraith : Card
 	{
 		public StreetWraith()
 		{
-			this.Name = "Street Wraith";
-			this.Type = CardType.Draw;
-			this.Color = Color.Black;
+			Name = "Street Wraith";
+			Type = CardType.Draw;
+			Color = Color.Black;
+		    Cost = Manacost.None;
 
-			this.Priority = 0.10m;		//First!!!
-			this.StartMana = 2;
-			this.EndMana = 3;		//Treat draw as +1 mana
+			Priority = 0.10m;		//First!!!
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -30,17 +29,16 @@ namespace Goldfisher
 
 		public override void Resolve(BoardState boardState)
 		{
-			//Put on stack and pay cost
-			boardState.Hand.Remove(this);
+            //Pay costs, put on stack.
+            boardState.Manapool.Pay(Cost);
+            boardState.Hand.Remove(this);
 
-			//Get effect
-			var cards = boardState.DrawCards(1);
+            //Resolve
+            var drawn = boardState.DrawCards(1).First();
+            boardState.Graveyard.Add(this);
 
-			//Finish resolution
-			boardState.Graveyard.Add(this);
-
-			//Log
-			boardState.Log(Usage.Cycle, this, "Draw {0}".FormatWith(cards.First()));
+            //Log
+            boardState.Log(Usage.Cycle, this, "Draw {0}".FormatWith(drawn));
 		}
 	}
 }

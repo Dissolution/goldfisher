@@ -36,8 +36,15 @@ namespace Goldfisher
 		}
 		#endregion
 
-		#region Constructors
-		public Manapool()
+        #region Static Properties
+	    public static Manapool Empty
+	    {
+	        get { return new Manapool();}
+	    }
+        #endregion
+
+        #region Constructors
+        public Manapool()
 			: base()
 		{
 			_baseColors = new[] {Color.White, Color.Blue, Color.Black, Color.Red, Color.Green};
@@ -72,8 +79,11 @@ namespace Goldfisher
 
 		public Manapool Add(int amount, Color color)
 		{
-			if (amount <= 0)
+			if (amount < 0)
 				throw new ArgumentOutOfRangeException("amount");
+
+		    if (amount == 0)
+		        return this;
 
 			if (color.FlagCount() > 1)
 				_mana[Color.Any] += amount;
@@ -108,13 +118,12 @@ namespace Goldfisher
 		public bool CanPay(Manacost manacost)
 		{
 			//Check individual colors + any
-			return Total >= manacost.Total &&
-				   White + Any >= manacost.White &&
-			       Blue + Any >= manacost.Blue &&
-			       Black + Any >= manacost.Black &&
-			       Red + Any >= manacost.Red &&
-			       Green + Any >= manacost.Green &&
-			       Total >= manacost.Colorless;
+		    return Total >= manacost.Total &&
+		           White + Any >= manacost.White &&
+		           Blue + Any >= manacost.Blue &&
+		           Black + Any >= manacost.Black &&
+		           Red + Any >= manacost.Red &&
+		           Green + Any >= manacost.Green;
 		}
 
 		public Manapool Pay(Manacost manacost)
@@ -122,15 +131,18 @@ namespace Goldfisher
 			//Pay for colors from that color or any
 			foreach (var color in _baseColors)
 			{
+                //Do we have a cost for this color?
 				if (manacost[color] == 0)
 					continue;
 
+                //If we can pay total, pay it
 				if (_mana[color] >= manacost[color])
 				{
 					_mana[color] -= manacost[color];
 				}
 				else
 				{
+                    //Pay from this color then from Any
 					var remains = manacost[color] - _mana[color];
 					_mana[color] = 0;
 					if (_mana[Color.Any] < remains)
@@ -159,11 +171,9 @@ namespace Goldfisher
 						remains = 0;
 						break;
 					}
-					else
-					{
-						remains -= _mana[color];
-						_mana[color] = 0;
-					}
+				    
+                    remains -= _mana[color];
+				    _mana[color] = 0;
 				}
 
 				//If remains, subtract from Any

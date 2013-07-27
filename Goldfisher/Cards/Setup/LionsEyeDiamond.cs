@@ -1,24 +1,21 @@
-﻿using System.Linq;
-using Goldfisher.Cards;
-
-namespace Goldfisher
+﻿namespace Goldfisher.Cards
 {
-	public class GoblinCharbelcher : Card
+	public class LionsEyeDiamond : Card
 	{
-		public GoblinCharbelcher()
+		public LionsEyeDiamond()
 		{
-			Name = "Goblin Charbelcher";
-			Type = CardType.WinCon;
+			Name = "Lion's Eye Diamond";
+			Type = CardType.Ramp;
             Color = Color.None;
-			Cost = new Manacost("4");
+		    Cost = Manacost.None;
 
-			Priority = 2.2m;		//WinCon
+			Priority = 1.9m;		//Last of ramp
 		}
-
 
 		public override bool CanCast(BoardState boardState)
 		{
-			return boardState.Manapool.CanPay(Cost);
+			//Yes, we can always cast this.
+			return true;
 		}
 
 		public override void Resolve(BoardState boardState)
@@ -28,9 +25,9 @@ namespace Goldfisher
             boardState.Hand.Remove(this);
 
             //Resolve
+		    boardState.LedMana += 3;
             boardState.Storm += 1;
-            boardState.Battlefield.Add(this);
-            boardState.WinConditionType = WinConditionType.Belcher;
+            boardState.Graveyard.Add(this);
 
             //Log
             boardState.Log(Usage.Cast, this);

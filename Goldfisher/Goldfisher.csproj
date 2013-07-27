@@ -55,22 +55,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cards\Base\Card.cs" />
-    <Compile Include="Cards\Draw\StreetWraith.cs" />
-    <Compile Include="Cards\InitialSources\ChromeMox.cs" />
-    <Compile Include="Cards\Ramp\DesperateRitual.cs" />
-    <Compile Include="Cards\InitialSources\ElvishSpiritGuide.cs" />
-    <Compile Include="Cards\Draw\GitaxianProbe.cs" />
-    <Compile Include="Cards\InitialSources\LandGrant.cs" />
-    <Compile Include="Cards\Ramp\GrimMonolith.cs" />
-    <Compile Include="Cards\Ramp\LionsEyeDiamond.cs" />
-    <Compile Include="Cards\InitialSources\LotusPetal.cs" />
-    <Compile Include="Cards\Draw\Manamorphose.cs" />
-    <Compile Include="Cards\Ramp\PyreticRitual.cs" />
-    <Compile Include="Cards\Ramp\RiteOfFlame.cs" />
-    <Compile Include="Cards\InitialSources\SimianSpiritGuide.cs" />
-    <Compile Include="Cards\InitialSources\Taiga.cs" />
-    <Compile Include="Cards\Ramp\SeethingSong.cs" />
-    <Compile Include="Cards\Ramp\TinderWall.cs" />
+    <Compile Include="Cards\Base\ManaSource.cs" />
+    <Compile Include="Cards\Setup\StreetWraith.cs" />
+    <Compile Include="Cards\ManaSources\Initial\ChromeMox.cs" />
+    <Compile Include="Cards\ManaSources\Ramp\DesperateRitual.cs" />
+    <Compile Include="Cards\ManaSources\Initial\ElvishSpiritGuide.cs" />
+    <Compile Include="Cards\Setup\GitaxianProbe.cs" />
+    <Compile Include="Cards\Setup\LandGrant.cs" />
+    <Compile Include="Cards\ManaSources\Ramp\GrimMonolith.cs" />
+    <Compile Include="Cards\Setup\LionsEyeDiamond.cs" />
+    <Compile Include="Cards\ManaSources\Initial\LotusPetal.cs" />
+    <Compile Include="Cards\Setup\Manamorphose.cs" />
+    <Compile Include="Cards\ManaSources\Ramp\PyreticRitual.cs" />
+    <Compile Include="Cards\ManaSources\Ramp\RiteOfFlame.cs" />
+    <Compile Include="Cards\ManaSources\Initial\SimianSpiritGuide.cs" />
+    <Compile Include="Cards\ManaSources\Initial\Taiga.cs" />
+    <Compile Include="Cards\ManaSources\Ramp\SeethingSong.cs" />
+    <Compile Include="Cards\ManaSources\Ramp\TinderWall.cs" />
     <Compile Include="Cards\WinCons\GoblinCharbelcher.cs" />
     <Compile Include="Cards\WinCons\BurningWish.cs" />
     <Compile Include="Cards\WinCons\EmptyTheWarrens.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Enumerations\WinConditionType.cs" />
     <Compile Include="Extensions\AllExtensions.cs" />
     <Compile Include="Fishers\DefaultFisher.cs" />
-    <Compile Include="Fishers\Decklist.cs" />
+    <Compile Include="Fishers\Decklists.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,7 +89,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Results.cs" />
+    <Compile Include="Fishers\Results.cs" />
     <Compile Include="Types\BoardState.cs" />
     <Compile Include="Types\Color.cs" />
     <Compile Include="Types\Manacost.cs" />

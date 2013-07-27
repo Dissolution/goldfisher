@@ -1,20 +1,17 @@
-﻿using System.Linq;
-using Goldfisher.Cards;
-
-namespace Goldfisher
+﻿namespace Goldfisher.Cards
 {
-	public class GoblinCharbelcher : Card
+	public class PyreticRitual : ManaSource
 	{
-		public GoblinCharbelcher()
+		public PyreticRitual()
 		{
-			Name = "Goblin Charbelcher";
-			Type = CardType.WinCon;
-            Color = Color.None;
-			Cost = new Manacost("4");
+			Name = "Pyretic Ritual";
+			Type = CardType.Ramp;
+			Color = Color.Red;
+			Cost = new Manacost("1R");
+            Produces = new Manapool("RRR");
 
-			Priority = 2.2m;		//WinCon
+			Priority = 1.0m;		//After initials
 		}
-
 
 		public override bool CanCast(BoardState boardState)
 		{
@@ -28,9 +25,9 @@ namespace Goldfisher
             boardState.Hand.Remove(this);
 
             //Resolve
+            boardState.Manapool.Add(Produces);
             boardState.Storm += 1;
-            boardState.Battlefield.Add(this);
-            boardState.WinConditionType = WinConditionType.Belcher;
+            boardState.Graveyard.Add(this);
 
             //Log
             boardState.Log(Usage.Cast, this);

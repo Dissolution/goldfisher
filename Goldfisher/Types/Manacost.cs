@@ -57,26 +57,34 @@ namespace Goldfisher
 		#endregion
 
 		#region Constructors
+        /// <summary>
+        /// Create a new, empty, mana cost
+        /// </summary>
 		public Manacost()
 		{
+            //Setup dictionary
 			foreach (var color in Enum.GetValues(typeof(Color)))
 			{
 				_mana.Add((Color)color, 0);
 			}
 		}
 
-		public Manacost(string castingCost)
+        /// <summary>
+        /// Create a manacost from a text representation
+        /// </summary>
+        /// <param name="cost"></param>
+		public Manacost(string cost)
 			: this()
 		{
-			castingCost = castingCost.ToUpper();
-		    var numbers = new string(castingCost.Where(char.IsNumber).ToArray());
+			cost = cost.ToUpper();
+		    var numbers = new string(cost.Where(char.IsNumber).ToArray());
 		    if (!string.IsNullOrWhiteSpace(numbers))
 		        _mana[Color.None] = Convert.ToInt32(numbers);
-			_mana[Color.White] = castingCost.Count(c => c == 'W');
-            _mana[Color.Blue] = castingCost.Count(c => c == 'U');
-            _mana[Color.Black] = castingCost.Count(c => c == 'B');
-            _mana[Color.Red] = castingCost.Count(c => c == 'R');
-            _mana[Color.Green] = castingCost.Count(c => c == 'G');
+			_mana[Color.White] = cost.Count(c => c == 'W');
+            _mana[Color.Blue] = cost.Count(c => c == 'U');
+            _mana[Color.Black] = cost.Count(c => c == 'B');
+            _mana[Color.Red] = cost.Count(c => c == 'R');
+            _mana[Color.Green] = cost.Count(c => c == 'G');
 		}
 		#endregion
 

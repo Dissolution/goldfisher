@@ -1,15 +1,16 @@
-﻿namespace Goldfisher
+﻿namespace Goldfisher.Cards
 {
-	public class SimianSpiritGuide : Card
+	public class ElvishSpiritGuide : ManaSource
 	{
-		public SimianSpiritGuide()
+		public ElvishSpiritGuide()
 		{
-			this.Name = "Simian Spirit Guide";
-			this.Type = CardType.InitialMana;
-			this.Color = Color.Red;
+			Name = "Elvish Spirit Guide";
+			Type = CardType.InitialMana;
+			Color = Color.Green;
+		    Cost = Manacost.None;
+            Produces = new Manapool("G");
 
-			this.Priority = .5m;		//Very early
-			this.EndMana = 1;
+		    Priority = 0.5m;        //Early
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -23,8 +24,8 @@
 			boardState.Hand.Remove(this);
 
 			//Get effect
-			boardState.Manapool.Add("R");
-
+		    boardState.Manapool.Add(Produces);
+		
 			//Finish resolution
 			boardState.Exile.Add(this);
 

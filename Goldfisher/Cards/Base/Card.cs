@@ -1,34 +1,40 @@
 ﻿using System;
 
-namespace Goldfisher
+namespace Goldfisher.Cards
 {
 	public abstract class Card : IEquatable<Card>
 	{
 		#region Properties
+        /// <summary>
+        /// Card's Name
+        /// </summary>
 		public string Name { get; protected set; }
-		public CardType Type { get; protected set; }
-		public Color Color { get; protected set; }
-		public Manacost Cost { get; protected set; }
-		public decimal Priority { get; protected set; }
 
-		public int StartMana { get; protected set; }
-		public int EndMana { get; protected set; }
-		public int AddMana
-		{
-			get { return EndMana - StartMana; }
-		}
+        /// <summary>
+        /// Card's Role
+        /// </summary>
+		public CardType Type { get; protected set; }
+
+        /// <summary>
+        /// Card's color(s)
+        /// </summary>
+		public Color Color { get; protected set; }
+
+        /// <summary>
+        /// Card's mana cost
+        /// </summary>
+		public Manacost Cost { get; protected set; }
+
+        /// <summary>
+        /// Card's cast priority (lower is earlier)
+        /// </summary>
+		public decimal Priority { get; protected set; }
 		#endregion
 
 		#region Constructors
 		protected Card()
 		{
-			Name = string.Empty;
-			Type = CardType.None;
-			Color = Color.None;
-			Cost = Manacost.None;
-			Priority = 10.0m;	//Last
-			StartMana = 0;
-			EndMana = 0;
+            //No defaults, each card must specify.
 		}
 		#endregion
 

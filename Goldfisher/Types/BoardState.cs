@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Goldfisher.Cards;
 
 namespace Goldfisher
 {
 	public class BoardState
 	{
-		private readonly List<string> _log; 
+		private List<string> _log;
+	    private Random _random;
+        
+        public int Seed { get; set; }
 
 		public List<Card> Library { get; set; } 
 		public List<Card> Hand { get; set; }
@@ -22,29 +26,45 @@ namespace Goldfisher
 		public WinConditionType GoalType { get; set; }
 		public WinConditionType WinConditionType { get; set; }
 
-		public BoardState()
-		{
-			Library = new List<Card>();
-			Hand = new List<Card>();
-			Graveyard = new List<Card>();
-			Exile = new List<Card>();
-			Battlefield = new List<Card>();
-			_log = new List<string>();
-			Manapool = new Manapool();
-			LedMana = 0;
-			Storm = 0;
-			
-			GoalType = WinConditionType.None;
-			WinConditionType = WinConditionType.None;
-		}
-
-		public BoardState(List<Card> library)
-			: this()
+        #region Constructors
+        public BoardState(List<Card> library)
 		{
 			this.Library = library.Copy();
+            this.Seed = unchecked((int) DateTime.Now.Ticks);
+
+            _random = new Random();
+            Reset();
 		}
 
-		public void Log(Usage usage, Card card, string effect)
+        public BoardState(List<Card> library, int seed)
+        {
+            this.Library = library.Copy();
+            this.Seed = seed;
+
+            _random = new Random();
+            Reset();
+        }
+        #endregion
+
+        #region Private Methods
+        private void Reset()
+        {
+            Hand = new List<Card>();
+            Graveyard = new List<Card>();
+            Exile = new List<Card>();
+            Battlefield = new List<Card>();
+            _log = new List<string>();
+            Manapool = new Manapool();
+            LedMana = 0;
+            Storm = 0;
+
+            GoalType = WinConditionType.None;
+            WinConditionType = WinConditionType.None;
+        }
+        #endregion
+
+        #region Public Methods
+        public void Log(Usage usage, Card card, string effect)
 		{
 			_log.Add("({0}): {1} {2} - {3}".FormatWith(Manapool, usage, card.Name, effect));
 		}
@@ -70,7 +90,15 @@ namespace Goldfisher
 
         public void Shuffle()
         {
-            this.Library = Library.AsRandomized().ToList();
+            //Fisher-Yates Shuffle
+            var count = Library.Count - 1;
+            for (var x = count; x > 1; x--)
+            {
+                var y = _random.Next(x + 1);
+                var value = Library[y];
+                Library[y] = Library[x];
+                Library[x] = value;
+            }
         }
 
 		public void Mulligan()
@@ -82,5 +110,23 @@ namespace Goldfisher
 			DrawCards(cards - 1);
 			Log("Mulliganned to {0}".FormatWith(cards-1));
 		}
-	}
+
+        public BoardState Copy()
+        {
+            var state = new BoardState(Library, Seed)
+                {
+                    Hand = Hand.Copy(),
+                    Graveyard = Graveyard.Copy(),
+                    Exile = Exile.Copy(),
+                    Battlefield = Battlefield.Copy(),
+                    Storm = Storm,
+                    Manapool = Manapool.Copy(),
+                    LedMana = LedMana,
+                    GoalType = GoalType,
+                    WinConditionType = WinConditionType
+                };
+            return state;
+        }
+        #endregion
+    }
 }

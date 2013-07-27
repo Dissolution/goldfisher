@@ -15,20 +15,6 @@ namespace Goldfisher
             return string.Format(str, args);
         }
 
-        public static IEnumerable<T> AsRandomized<T>(this IEnumerable<T> enumerable)
-        {
-            var list = enumerable.ToList();
-            for (var i = 0; i < list.Count; i++)
-            {
-                var temp = list[i];
-                var r = _random.Next(0, list.Count);
-                list[i] = list[r];
-                list[r] = temp;
-            }
-
-            return list;
-        }
-
         public static List<T> Copy<T>(this List<T> list)
         {
             var array = list.ToArray();
