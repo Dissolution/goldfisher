@@ -9,6 +9,7 @@ namespace Goldfisher.Cards
 		public Manamorphose()
 		{
 			Name = "Manamorphose";
+		    ShortName = "MM";
 			Type = CardType.Draw;
 			Color = Color.Red | Color.Green;
 			
@@ -17,7 +18,7 @@ namespace Goldfisher.Cards
 
             Produces = new Manapool("**");
 
-			Priority = 1.1m;		//After tinder wall's G
+			Priority = 2.1m;
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -26,7 +27,7 @@ namespace Goldfisher.Cards
 			        boardState.Manapool.CanPay(_secondCost));
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
 		    boardState.Manapool.Pay(boardState.Manapool.CanPay(Cost) ? Cost : _secondCost);
@@ -40,6 +41,7 @@ namespace Goldfisher.Cards
 
             //Log
             boardState.Log(Usage.Cast, this, "Draw {0}".FormatWith(drawn));
+			return true;
 		}
 	}
 }

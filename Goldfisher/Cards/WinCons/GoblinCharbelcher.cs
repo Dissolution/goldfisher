@@ -8,11 +8,12 @@ namespace Goldfisher
 		public GoblinCharbelcher()
 		{
 			Name = "Goblin Charbelcher";
+		    ShortName = "Belcher";
 			Type = CardType.WinCon;
             Color = Color.None;
 			Cost = new Manacost("4");
 
-			Priority = 2.2m;		//WinCon
+			Priority = 3.2m;		//WinCon
 		}
 
 
@@ -21,7 +22,7 @@ namespace Goldfisher
 			return boardState.Manapool.CanPay(Cost);
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -34,6 +35,7 @@ namespace Goldfisher
 
             //Log
             boardState.Log(Usage.Cast, this);
+			return true;
 		}
 	}
 }

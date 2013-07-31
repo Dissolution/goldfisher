@@ -12,7 +12,7 @@ namespace Goldfisher
 	{
 		public DefaultFisher()
 		{
-		    var library = Decklists.BestFound();
+		    var library = Decklists.Dissolution();
 
 			//Prime the results
 			//Win Con Type, # of that type (damage/tokens), times happened
@@ -28,18 +28,16 @@ namespace Goldfisher
 				//Create a new boardstate for this simulation.
 				var state = new BoardState(library);
 
-                //Shuffle + draw opening hand.
-			    state.Shuffle();
-				state.DrawCards(7);
-
                 #region Testing Specific Hands
-                //boardState.Hand.Clear();
-                //boardState.Hand.AddRange(new LotusPetal(), 
-                //                    new RiteOfFlame(), 
-                //                    new RiteOfFlame(), 
-                //                    new EmptyTheWarrens(),
-                //                    new LionsEyeDiamond(), 
-                //                    new GoblinCharbelcher());
+				//state.Hand.Clear();
+				//state.Hand.AddRange(new LotusPetal(),
+				//					new LionsEyeDiamond(),
+				//					new ChromeMox(),
+				//					new LandGrant(),
+				//					new LionsEyeDiamond(),
+				//					new BurningWish(),
+				//					new GoblinCharbelcher());
+				//state.Library.Insert(0, new LionsEyeDiamond());
                 #endregion
 
                 //Loop until we mull to death or get a 'win'.
@@ -61,10 +59,15 @@ namespace Goldfisher
 			        //If we didn't have a wincondition, reset (should've mulliganned)
 			        if (state.WinConditionType == WinConditionType.None)
 			        {
+						if (origState.Hand.Count >= 6 && origState.Hand.Any(c => c.Name == "Chrome Mox"))
+						{
+							var play = origState.PlayLog;
+						}
+
                         //Reset state
 			            state = origState;
                         //Force mulligan
-                        state.Mulligan();
+                        state.Mulligan("Couldn't fish");
 			        }
 			    }
 
@@ -72,6 +75,7 @@ namespace Goldfisher
 				if (state.WinConditionType == WinConditionType.Empty)
 				{
 					var tokens = state.Storm * 2;
+				    state.Log("{0} tokens".FormatWith(tokens));
 					results.Add(WinConditionType.Empty, tokens, state);
 				}
 				else if (state.WinConditionType == WinConditionType.Belcher)
@@ -98,14 +102,22 @@ namespace Goldfisher
 					else
 					{
 						//Drop only
+                        state.Log("Can't activate");
 						results.Add(WinConditionType.Belcher, -1, state);
 					}
 				}
 				else
 				{
 					//Did not win (fizzle)
+                    state.Log("Fizzle");
 					results.Add(WinConditionType.None, 0, state);
 				}
+
+				////I want to look at winconditions without chrome mox logic
+				//if (state.Battlefield.Any(c => c.Name == "Chrome Mox"))
+				//{
+				//	var log = state.PlayLog;
+				//}
 			}
 
 			timer.Stop();
@@ -197,7 +209,7 @@ namespace Goldfisher
 				//Check 1 - Does the hand have a win condition?
 				if (state.Hand.All(h => h.Type != CardType.WinCon))
 				{
-					state.Mulligan();
+					state.Mulligan("No win cons");
 					continue;
 				}
 
@@ -231,16 +243,6 @@ namespace Goldfisher
 		{
 			var skip = 0;
 
-			//Try to determine how we're going to win (Belcher > Empty)
-			if (boardState.Hand.Contains(new GoblinCharbelcher()))
-			{
-				boardState.GoalType = WinConditionType.Belcher;
-			}
-			else
-			{
-				boardState.GoalType = WinConditionType.Empty;
-			}
-
 			while (true)
 			{
 				//Get first by prority
@@ -253,8 +255,14 @@ namespace Goldfisher
 
 				if (card.CanCast(boardState))
 				{
-					card.Resolve(boardState);
-					skip = 0;
+					if (card.Resolve(boardState))
+					{
+						skip = 0;
+					}
+					else
+					{
+						skip += 1; //Skip this card for now, we can't resolve it.
+					}
 				}
 				else
 				{

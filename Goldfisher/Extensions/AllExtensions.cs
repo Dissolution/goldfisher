@@ -49,5 +49,25 @@ namespace Goldfisher
             var tuple = new Tuple<T, U, V>(first, second, third);
             list.Add(tuple);
         }
+
+        public static List<T> Randomize<T>(this List<T> list)
+        {
+            //Fisher-Yates Shuffle
+            var count = list.Count - 1;
+            for (var x = count; x > 1; x--)
+            {
+                var y = _random.Next(x + 1);
+                var value = list[y];
+                list[y] = list[x];
+                list[x] = value;
+            }
+
+            return list;
+        }
+
+        public static string AsString<T>(this List<T> list)
+        {
+            return string.Join(", ", list);
+        }
     }
 }

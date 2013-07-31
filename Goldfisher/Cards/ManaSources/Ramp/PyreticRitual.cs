@@ -5,12 +5,13 @@
 		public PyreticRitual()
 		{
 			Name = "Pyretic Ritual";
+            ShortName = "Pyretic";
 			Type = CardType.Ramp;
 			Color = Color.Red;
 			Cost = new Manacost("1R");
             Produces = new Manapool("RRR");
 
-			Priority = 1.0m;		//After initials
+			Priority = 2.3m;
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -18,7 +19,7 @@
 			return boardState.Manapool.CanPay(Cost);
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -31,6 +32,7 @@
 
             //Log
             boardState.Log(Usage.Cast, this);
+			return true;
 		}
 	}
 }

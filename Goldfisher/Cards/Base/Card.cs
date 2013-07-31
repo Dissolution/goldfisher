@@ -11,6 +11,11 @@ namespace Goldfisher.Cards
 		public string Name { get; protected set; }
 
         /// <summary>
+        /// Short/Abbreviated Name
+        /// </summary>
+        public string ShortName { get; protected set; }
+
+        /// <summary>
         /// Card's Role
         /// </summary>
 		public CardType Type { get; protected set; }
@@ -40,7 +45,7 @@ namespace Goldfisher.Cards
 
 		#region Abstract Methods
 		public abstract bool CanCast(BoardState boardState);
-		public abstract void Resolve(BoardState boardState);
+		public abstract bool Resolve(BoardState boardState);
 		#endregion
 
 		#region Public Methods

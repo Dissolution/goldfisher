@@ -5,12 +5,13 @@
 		public Taiga()
 		{
 			Name = "Taiga";
+		    ShortName = "Taiga";
 			Type = CardType.InitialMana;
             Color = Color.None;
 		    Cost = Manacost.None;
             Produces = new Manapool("*");       //Technically Red or Green, but we only have two colors, so treat as Any.
 
-		    Priority = 0.1m;        //First
+		    Priority = 0.10m;
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -18,7 +19,7 @@
 			return true;		//Always
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
 			//Put on stack and pay cost
 			boardState.Hand.Remove(this);
@@ -31,6 +32,7 @@
 
 			//Log
 			boardState.Log(Usage.Play, this);
+			return true;
 		}
 	}
 }

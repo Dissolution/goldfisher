@@ -7,12 +7,13 @@ namespace Goldfisher.Cards
         public RiteOfFlame()
 		{
 			Name = "Rite of Flame";
+            ShortName = "Rite";
 			Type = CardType.Ramp;
 			Color = Color.Red;
 			Cost = new Manacost("R");
             Produces = new Manapool("RR");      //Could be more
 
-            Priority = 1.0m;		//Setup mana
+            Priority = 2.2m;
 		}
 
 
@@ -21,7 +22,7 @@ namespace Goldfisher.Cards
 			return boardState.Manapool.CanPay(Cost);
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -38,6 +39,7 @@ namespace Goldfisher.Cards
 
             //Log
             boardState.Log(Usage.Cast, this);
+			return true;
 		}
 	}
 }

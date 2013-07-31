@@ -7,12 +7,13 @@ namespace Goldfisher.Cards
 		public DesperateRitual()
 		{
 		    Name = "Desperate Ritual";
+            ShortName = "Desperate";
             Type = CardType.Ramp;
             Color = Color.Red;
             Cost = new Manacost("1R");
             Produces = new Manapool("RRR");
 
-		    Priority = 1.5m;        //After other ramps (for splice)
+		    Priority = 2.5m;
 		}
 
         public override bool CanCast(BoardState boardState)
@@ -20,7 +21,7 @@ namespace Goldfisher.Cards
             return boardState.Manapool.CanPay(Cost);
         }
 
-        public override void Resolve(BoardState boardState)
+        public override bool Resolve(BoardState boardState)
         {
             //Check if we have another Desperate Ritual and 2RR in pool
             if (boardState.Hand.Count(c => c.Name == Name) >= 2 &&
@@ -54,6 +55,7 @@ namespace Goldfisher.Cards
                 //Log
                 boardState.Log(Usage.Cast, this);
             }
+			return true;
         }
 	}
 }

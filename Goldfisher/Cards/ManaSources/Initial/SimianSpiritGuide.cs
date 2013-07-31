@@ -5,12 +5,13 @@
 		public SimianSpiritGuide()
 		{
 			Name = "Simian Spirit Guide";
+		    ShortName = "SSG";
 			Type = CardType.InitialMana;
 			Color = Color.Red;
 		    Cost = Manacost.None;
 			Produces = new Manapool("R");
 
-		    Priority = 0.5m;        //Early
+		    Priority = 1.0m;
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -18,7 +19,7 @@
 			return true;		//Always
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
 			//Put on stack and pay cost
 			boardState.Hand.Remove(this);
@@ -31,6 +32,7 @@
 
 			//Log
 			boardState.Log(Usage.Exile, this);
+			return true;
 		}
 	}
 }

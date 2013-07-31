@@ -5,12 +5,13 @@
 		public SeethingSong()
 		{
 			Name = "Seething Song";
+		    ShortName = "Song";
 			Type = CardType.Ramp;
 			Color = Color.Red;
 			Cost = new Manacost("2R");
             Produces = new Manapool("RRRRR");
 
-            Priority = 1.5m;		//After other ramp, to not eat Green
+		    Priority = 2.4m;
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -18,7 +19,7 @@
 			return boardState.Manapool.CanPay(Cost);
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -31,6 +32,7 @@
 
             //Log
             boardState.Log(Usage.Cast, this);
+			return true;
 		}
 	}
 }

@@ -7,11 +7,12 @@ namespace Goldfisher.Cards
 		public StreetWraith()
 		{
 			Name = "Street Wraith";
+		    ShortName = "SW";
 			Type = CardType.Draw;
 			Color = Color.Black;
 		    Cost = Manacost.None;
 
-			Priority = 0.10m;		//First!!!
+			Priority = 0.2m;
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -27,7 +28,7 @@ namespace Goldfisher.Cards
 			return true;
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -39,6 +40,7 @@ namespace Goldfisher.Cards
 
             //Log
             boardState.Log(Usage.Cycle, this, "Draw {0}".FormatWith(drawn));
+			return true;
 		}
 	}
 }

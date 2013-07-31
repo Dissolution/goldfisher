@@ -6,11 +6,12 @@
 		public LandGrant()
 		{
 			Name = "Land Grant";
+		    ShortName = "Grant";
 			Type = CardType.InitialMana;
 			Color = Color.Green;
 		    Cost = Manacost.None;
 
-			Priority = .3m;		//Initial Mana
+			Priority = 0.4m;
 		}
 
 
@@ -19,7 +20,7 @@
 			return true;
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -37,13 +38,14 @@
                 boardState.Hand.Add(taiga);
 
                 //Log
-                boardState.Log(Usage.Cast, this, "Taiga -> Hand");
+                boardState.Log(Usage.Cast, this, "Taiga");
             }
             else
             {
                 //Log
                 boardState.Log(Usage.Cast, this, "Fail to find");
             }
+			return true;
 		}
 	}
 }

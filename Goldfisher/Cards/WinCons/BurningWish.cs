@@ -1,25 +1,35 @@
-﻿namespace Goldfisher.Cards
+﻿using System.Linq;
+
+namespace Goldfisher.Cards
 {
 	public class BurningWish : Card
 	{
 		public BurningWish()
 		{
 			Name = "Burning Wish";
+		    ShortName = "Wish";
 			Type = CardType.WinCon;
 			Color = Color.Red;
 			Cost = new Manacost("1R");
 
-			Priority = 2.1m;		//WinCon
+			Priority = 3.1m;		//WinCon
 		}
 
 
 		public override bool CanCast(BoardState boardState)
 		{
-			return (boardState.Manapool.CanPay(Cost) &&
+            //Override if we have Belcher and 7 Mana
+            if (boardState.Hand.Any(c => c.Name == "Goblin Charbelcher") &&
+                boardState.Manapool.Total >= 4 &&
+                boardState.Manapool.Total + boardState.LedMana >= 7)
+                return false;
+
+            //Can we pay for this and have mana for the empty we fetch?
+            return (boardState.Manapool.CanPay(Cost) &&
 			        boardState.Manapool.Total + boardState.LedMana >= 6);
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -45,7 +55,8 @@
             boardState.Exile.Add(this);
 
             //Log
-			boardState.Log(Usage.Cast, this, "Empty -> Hand");
+			boardState.Log(Usage.Cast, this, "Empty");
+			return true;
 		}
 	}
 }

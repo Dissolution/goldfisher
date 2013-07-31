@@ -5,12 +5,13 @@
 		public GrimMonolith()
 		{
 			Name = "Grim Monolith";
+		    ShortName = "Grim";
 			Type = CardType.Ramp;
             Color = Color.None;
 			Cost = new Manacost("2");
             Produces = new Manapool("3");
 
-			Priority = 1.75m;		//After other ramps (don't want to eat up mana for colorless)
+		    Priority = 2.6m;
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -18,7 +19,7 @@
 			return boardState.Manapool.CanPay(Cost);
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -31,6 +32,7 @@
 
             //Log
             boardState.Log(Usage.Cast, this);
+			return true;
 		}
 	}
 }

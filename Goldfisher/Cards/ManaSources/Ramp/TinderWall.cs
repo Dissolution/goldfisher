@@ -5,12 +5,13 @@
         public TinderWall()
 		{
 			Name = "Tinder Wall";
+            ShortName = "Tinder";
 			Type = CardType.Ramp;
 			Color = Color.Green;
 			Cost = new Manacost("G");
             Produces = new Manapool("RR");
 
-			Priority = .9m;		//Before other initials, as it uses Green (harder to get)
+            Priority = 2.0m;
 		}
 
 
@@ -19,7 +20,7 @@
 			return boardState.Manapool.CanPay(Cost);
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -32,6 +33,7 @@
 
             //Log
             boardState.Log(Usage.Cast, this);
+			return true;
 		}
 	}
 }

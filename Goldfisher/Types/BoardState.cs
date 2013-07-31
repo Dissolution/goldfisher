@@ -7,11 +7,7 @@ namespace Goldfisher
 {
 	public class BoardState
 	{
-		private List<string> _log;
-	    private Random _random;
-        
-        public int Seed { get; set; }
-
+        public List<string> PlayLog { get; set; }
 		public List<Card> Library { get; set; } 
 		public List<Card> Hand { get; set; }
 		public List<Card> Graveyard { get; set; }
@@ -23,27 +19,22 @@ namespace Goldfisher
 		public Manapool Manapool { get; set; }
 		public int LedMana { get; set; }
 
-		public WinConditionType GoalType { get; set; }
 		public WinConditionType WinConditionType { get; set; }
+
+        #region Properties
+
+        #endregion
 
         #region Constructors
         public BoardState(List<Card> library)
 		{
-			this.Library = library.Copy();
-            this.Seed = unchecked((int) DateTime.Now.Ticks);
-
-            _random = new Random();
+			Library = library.Copy();
             Reset();
+
+            Shuffle();
+            DrawCards(7);
+            Log("Opening Hand: " + string.Join(", ", Hand.OrderBy(c => c.Cost.Total).Select(c => c.ShortName)));
 		}
-
-        public BoardState(List<Card> library, int seed)
-        {
-            this.Library = library.Copy();
-            this.Seed = seed;
-
-            _random = new Random();
-            Reset();
-        }
         #endregion
 
         #region Private Methods
@@ -53,12 +44,11 @@ namespace Goldfisher
             Graveyard = new List<Card>();
             Exile = new List<Card>();
             Battlefield = new List<Card>();
-            _log = new List<string>();
+            PlayLog = new List<string>();
             Manapool = new Manapool();
             LedMana = 0;
             Storm = 0;
 
-            GoalType = WinConditionType.None;
             WinConditionType = WinConditionType.None;
         }
         #endregion
@@ -66,15 +56,15 @@ namespace Goldfisher
         #region Public Methods
         public void Log(Usage usage, Card card, string effect)
 		{
-			_log.Add("({0}): {1} {2} - {3}".FormatWith(Manapool, usage, card.Name, effect));
+			PlayLog.Add("({0}): {1} {2} - {3}".FormatWith(Manapool, usage, card.Name, effect));
 		}
 		public void Log(Usage usage, Card card)
 		{
-			_log.Add("({0}): {1} {2}".FormatWith(Manapool, usage, card.Name));
+			PlayLog.Add("({0}): {1} {2}".FormatWith(Manapool, usage, card.Name));
 		}
 		public void Log(string text)
 		{
-			_log.Add(text);
+			PlayLog.Add(text);
 		}
 
 		public List<Card> DrawCards(int number)
@@ -90,41 +80,33 @@ namespace Goldfisher
 
         public void Shuffle()
         {
-            //Fisher-Yates Shuffle
-            var count = Library.Count - 1;
-            for (var x = count; x > 1; x--)
-            {
-                var y = _random.Next(x + 1);
-                var value = Library[y];
-                Library[y] = Library[x];
-                Library[x] = value;
-            }
+            Library.Randomize();
         }
 
-		public void Mulligan()
+		public void Mulligan(string reason)
 		{
-			var cards = Hand.Count;
+		    Log(reason);
+			var cardsInHand = Hand.Count;
+		    var originalHand = Hand.Copy();
 		    Library.AddRange(Hand);
 			Hand.Clear();
 			Shuffle();
-			DrawCards(cards - 1);
-			Log("Mulliganned to {0}".FormatWith(cards-1));
+			DrawCards(cardsInHand - 1);
+		    Log("Mulled to: " + string.Join(", ", Hand.OrderBy(c => c.Cost.Total).Select(c => c.ShortName)));
 		}
 
         public BoardState Copy()
         {
-            var state = new BoardState(Library, Seed)
-                {
-                    Hand = Hand.Copy(),
-                    Graveyard = Graveyard.Copy(),
-                    Exile = Exile.Copy(),
-                    Battlefield = Battlefield.Copy(),
-                    Storm = Storm,
-                    Manapool = Manapool.Copy(),
-                    LedMana = LedMana,
-                    GoalType = GoalType,
-                    WinConditionType = WinConditionType
-                };
+            var state = new BoardState(Library);
+            state.Hand = Hand.Copy();
+            state.Graveyard = Graveyard.Copy();
+            state.Exile = Exile.Copy();
+            state.Battlefield = Battlefield.Copy();
+            state.Storm = Storm;
+            state.Manapool = Manapool.Copy();
+            state.LedMana = LedMana;
+            state.WinConditionType = WinConditionType;
+            state.PlayLog = PlayLog.Copy();
             return state;
         }
         #endregion

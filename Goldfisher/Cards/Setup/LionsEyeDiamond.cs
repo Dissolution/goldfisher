@@ -5,11 +5,12 @@
 		public LionsEyeDiamond()
 		{
 			Name = "Lion's Eye Diamond";
+		    ShortName = "LED";
 			Type = CardType.Ramp;
             Color = Color.None;
 		    Cost = Manacost.None;
 
-			Priority = 1.9m;		//Last of ramp
+			Priority = 0.5m;
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -18,7 +19,7 @@
 			return true;
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -31,6 +32,7 @@
 
             //Log
             boardState.Log(Usage.Cast, this);
+			return true;
 		}
 	}
 }

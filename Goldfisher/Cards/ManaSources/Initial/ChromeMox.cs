@@ -9,13 +9,32 @@ namespace Goldfisher.Cards
 		public ChromeMox()
 		{
 			Name = "Chrome Mox";
+		    ShortName = "Mox";
 			Type = CardType.InitialMana;
             Color = Color.None;
 		    Cost = Manacost.None;
 		    Produces = Manapool.Empty;      //Treat as if it produces nothing
 
-		    Priority = .2m;     //Very early
+		    Priority = 0.3m;     //Very early
 		}
+
+		private void Imprint(BoardState state, Card card)
+		{
+			//Put on stack and pay cost
+			state.Hand.Remove(this);
+			state.Hand.Remove(card);
+
+			//Get effect
+			state.Manapool.Add(card.Color);
+
+			//Finish resolution
+			state.Battlefield.Add(this);
+			state.Exile.Add(card);
+
+			//Log
+			state.Log(Usage.Cast, this, "Imprinting {0}".FormatWith(card.Name));
+		}
+
 
 		public override bool CanCast(BoardState boardState)
 		{
@@ -25,69 +44,74 @@ namespace Goldfisher.Cards
 				return false;
 
 			//Otherwise, verify we have a single colored card in hand
-			if (boardState.GoalType == WinConditionType.Belcher)
-				return boardState.Hand.Any(c => c.Color != Color.None);
-			else
-			{
-				return boardState.Hand.Any(c => c.Color != Color.None && !c.Name.EqualsAny("Burning Wish", "Empty the Warrens"));
-			}
+			return boardState.Hand.Any(c => c.Color != Color.None);
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
-			//Check our win type. 
-			var imprints = new List<string>();
-			if (boardState.GoalType == WinConditionType.Belcher)
-			{
-				//If we want to belch, we are okay with imprinting non-manasource cards (storm doesn't matter)
-				imprints.AddRange("Empty the Warrens", "Land Grant", "Burning Wish",
-				                  "Elvish Spirit Guide", "Simian Spirit Guide",
-				                  "Tinder Wall", "Desperate Ritual", "Pyretic Ritual",
-				                  "Manamorphose", "Rite of Flame", "Seething Song");
-			}
-			else
-			{
-				//Storm count is more important
-				//But we will eat cards that we will never cast
-				var eCount = boardState.Hand.Count(c => c.Name == "Empty the Warrens");
-				if (eCount >= 1)
-					imprints.Add("Burning Wish");
-				if (eCount > 1)
-					imprints.Add("Empty the Warrens");
+			//We might not have to resolve ourselves, depending on what's in hand
 
-				var bCount = boardState.Hand.Count(c => c.Name == "Burning Wish");
-				if (bCount >= 1)
-					imprints.Add("Empty the Warrens");
-				if (bCount > 1)
-					imprints.Add("Burning Wish");
-
-				imprints.AddRange("Elvish Spirit Guide", "Simian Spirit Guide",
-									"Land Grant", "Tinder Wall", "Desperate Ritual", "Pyretic Ritual",
-								  "Manamorphose", "Rite of Flame", "Seething Song");
-			}
-			
-			//Check for proper imprint
-			foreach (var imprint in imprints)
+			//Check for multiples of WinCons
+			var cards = boardState.Hand.Where(c => c.Name == "Empty the Warrens").ToList();
+			if (cards.Count > 1)
 			{
-				var found = boardState.Hand.Find(c => c.Name == imprint);
-				if (found != null)
+				Imprint(boardState, cards.First());
+				return true;
+			}
+			cards = boardState.Hand.Where(c => c.Name == "Burning Wish").ToList();
+			if (cards.Count > 1)
+			{
+				Imprint(boardState, cards.First());
+				return true;
+			}
+			cards = boardState.Hand.Where(c => c.Name.EqualsAny("Burning Wish", "Empty the Warrens")).ToList();
+			if (cards.Count > 1)
+			{
+				//Check mana (assuming I imprint onto R
+				if (boardState.Manapool.Total >= 1 &&
+				    boardState.Manapool.Total + boardState.LedMana >= 5)
 				{
-					//Put on stack and pay cost
-					boardState.Hand.Remove(this);
-					boardState.Hand.Remove(found);
-
-					//Get effect
-					boardState.Manapool.Add(found.Color);
-
-					//Finish resolution
-					boardState.Battlefield.Add(this);
-					boardState.Exile.Add(found);
-
-					//Log
-					boardState.Log(Usage.Cast, this, "Imprinting {0}".FormatWith(found.Name));
-					return;
+					Imprint(boardState, cards.First(c => c.Name == "Empty the Warrens"));
+					return true;
 				}
+
+				if (boardState.Manapool.Total >= 3)
+				{
+					Imprint(boardState, cards.First(c => c.Name == "Burning Wish"));
+					return true;
+				}
+
+				//Wait!
+				return false;
 			}
+
+			
+			//Check for 'free' imprints
+			var card = boardState.Hand
+			                      .FirstOrDefault(c => c.Name.EqualsAny("Land Grant",
+			                                                            "Simian Spirit Guide",
+			                                                            "Elvish Spirit Guide",
+			                                                            "Pyretic Ritual",
+			                                                            "Desperate Ritual"));
+			if (card != null)
+			{
+				Imprint(boardState, card);
+				return true;
+			}
+
+			//Check for conditional imprints
+			if (boardState.Hand.Any(c => c.Name == "Tinder Wall") &&
+			    boardState.Hand.Any(c => c.Name != "Tinder Wall" && c.Cost.Green > 0))
+			{
+				//Imprint Tinder Wall
+				card = boardState.Hand.First(c => c.Name == "Tinder Wall");
+				Imprint(boardState, card);
+				return true;
+			}
+
+			//Don't imprint!?
+			return false;
+
 
 			//Couldn't cast!?
 			throw new Exception("WTF?!");

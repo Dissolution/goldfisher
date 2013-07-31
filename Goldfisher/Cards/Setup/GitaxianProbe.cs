@@ -7,11 +7,12 @@ namespace Goldfisher.Cards
 		public GitaxianProbe()
 		{
 			Name = "Gitaxian Probe";
+		    ShortName = "Probe";
 			Type = CardType.Draw;
 			Color = Color.Blue;
 		    Cost = Manacost.None;
 
-			Priority = 0.10m;		//First!!!
+			Priority = 0.20m;
 		}
 
 		public override bool CanCast(BoardState boardState)
@@ -28,7 +29,7 @@ namespace Goldfisher.Cards
 			return true;
 		}
 
-		public override void Resolve(BoardState boardState)
+		public override bool Resolve(BoardState boardState)
 		{
             //Pay costs, put on stack.
             boardState.Manapool.Pay(Cost);
@@ -41,6 +42,7 @@ namespace Goldfisher.Cards
 
             //Log
 		    boardState.Log(Usage.Cast, this, "Draw {0}".FormatWith(drawn));
+			return true;
 		}
 	}
 }
