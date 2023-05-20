@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net7.0;netstandard2.1;net48</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>Jay.Goldfisher</AssemblyName>
+        <RootNamespace>Jay.Goldfisher</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="Notes\Priority.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Notes\Priority.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="PolySharp" Version="1.13.2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Using Include="Jay.Goldfisher.Extensions" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,35 @@
+﻿Priorities
+
+First number is the type:
+0 - Setup (card draw, land grant)
+1 - Initial Mana
+2 - Ramp Mana
+3 - Win Conditions
+
+The second numbers are the order within that type.
+
+//0's
+0.0 - 
+0.1 - Taiga
+0.2 - Gitaxian Probe, Street Wraith
+0.3 - Chrome Mox		//Will let at least one land grant resolve first
+0.4 - Land Grant
+0.5 - Lion's Eye Diamond
+
+//1's
+1.0 - Spirit Guides
+1.1 - Lotus Petal
+
+//2's
+2.0 - Tinder Wall (use G up first)
+2.1 - Manamorphose (draw early)
+2.2 - Rite of Flame
+2.3 - Pyretic Ritual
+2.4 - Seething Song
+2.5 - Desperate Ritual (take advantage of splice)
+2.6 - Grim Monolith (don't want to eat up colored mana early)
+
+//3's (All will reorder depending on floating mana)
+3.0 - Empty the Warrens
+3.1 - Burning Wish
+3.2 - Goblin Charbelcher
