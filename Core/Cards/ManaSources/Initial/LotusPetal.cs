@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Initial;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Initial;
 
 public sealed class LotusPetal : ManaSource
 {
@@ -10,10 +6,10 @@ public sealed class LotusPetal : ManaSource
     {
         Name = "Lotus Petal";
         ShortName = "Petal";
-        Type = CardType.InitialMana;
+        Type = CardRole.InitialMana;
         Color = Color.None;
-        Cost = Manacost.None;
-        Produces = new Manapool("*");
+        Cost = ManaValue.None;
+        Produces = new ManaPool("*");
 
         Priority = 1.1m;
     }

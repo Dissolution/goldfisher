@@ -1,12 +1,12 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Extensions;
+﻿namespace Jay.Goldfisher.Types;
 
-namespace Jay.Goldfisher.Types;
+
+
 
 public class BoardState
 {
     public List<string> PlayLog { get; set; }
+
     public List<Card> Library { get; set; } 
     public List<Card> Hand { get; set; }
     public List<Card> Graveyard { get; set; }
@@ -15,7 +15,7 @@ public class BoardState
 
     public int Storm { get; set; }
 
-    public Manapool Manapool { get; set; }
+    public ManaPool Manapool { get; set; }
     public int LedMana { get; set; }
 
     public WinConditionType WinConditionType { get; set; }
@@ -40,7 +40,7 @@ public class BoardState
         Exile = new List<Card>();
         Battlefield = new List<Card>();
         PlayLog = new List<string>();
-        Manapool = new Manapool();
+        Manapool = new ManaPool();
         LedMana = 0;
         Storm = 0;
 

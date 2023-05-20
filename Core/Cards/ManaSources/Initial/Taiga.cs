@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Initial;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Initial;
 
 public class Taiga : ManaSource
 {
@@ -10,10 +6,10 @@ public class Taiga : ManaSource
     {
         Name = "Taiga";
         ShortName = "Taiga";
-        Type = CardType.InitialMana;
+        Type = CardRole.InitialMana;
         Color = Color.None;
-        Cost = Manacost.None;
-        Produces = new Manapool("*");       //Technically Red or Green, but we only have two colors, so treat as Any.
+        Cost = ManaValue.None;
+        Produces = new ManaPool("*");       //Technically Red or Green, but we only have two colors, so treat as Any.
 
         Priority = 0.10m;
     }

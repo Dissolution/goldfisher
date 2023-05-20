@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
 
 public class PyreticRitual : ManaSource
 {
@@ -10,10 +6,10 @@ public class PyreticRitual : ManaSource
     {
         Name = "Pyretic Ritual";
         ShortName = "Pyretic";
-        Type = CardType.Ramp;
+        Type = CardRole.Ramp;
         Color = Color.Red;
-        Cost = new Manacost("1R");
-        Produces = new Manapool("RRR");
+        Cost = new ManaValue("1R");
+        Produces = new ManaPool("RRR");
 
         Priority = 2.3m;
     }

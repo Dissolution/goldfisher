@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
 
 public class GrimMonolith : ManaSource
 {
@@ -10,10 +6,10 @@ public class GrimMonolith : ManaSource
     {
         Name = "Grim Monolith";
         ShortName = "Grim";
-        Type = CardType.Ramp;
+        Type = CardRole.Ramp;
         Color = Color.None;
-        Cost = new Manacost("2");
-        Produces = new Manapool("3");
+        Cost = new ManaValue("2");
+        Produces = new ManaPool("3");
 
         Priority = 2.6m;
     }

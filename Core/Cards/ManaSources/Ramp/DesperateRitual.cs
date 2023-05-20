@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
 
 public class DesperateRitual : ManaSource
 {
@@ -10,10 +6,10 @@ public class DesperateRitual : ManaSource
     {
         Name = "Desperate Ritual";
         ShortName = "Desperate";
-        Type = CardType.Ramp;
+        Type = CardRole.Ramp;
         Color = Color.Red;
-        Cost = new Manacost("1R");
-        Produces = new Manapool("RRR");
+        Cost = new ManaValue("1R");
+        Produces = new ManaPool("RRR");
 
         Priority = 2.5m;
     }
@@ -27,16 +23,16 @@ public class DesperateRitual : ManaSource
     {
         //Check if we have another Desperate Ritual and 2RR in pool
         if (boardState.Hand.Count(c => c.Name == Name) >= 2 &&
-            boardState.Manapool.CanPay(new Manacost("2RR")))
+            boardState.Manapool.CanPay(new ManaValue("2RR")))
         {
             //Splice the other onto this!
 
             //Pay costs, put on stack
-            boardState.Manapool.Pay(new Manacost("2RR"));
+            boardState.Manapool.Pay(new ManaValue("2RR"));
             boardState.Hand.Remove(this);       //Leave the other
 
             //Resolve
-            boardState.Manapool.Add(new Manapool("RRRRRR"));
+            boardState.Manapool.Add(new ManaPool("RRRRRR"));
             boardState.Storm += 1;
             boardState.Graveyard.Add(this);
 

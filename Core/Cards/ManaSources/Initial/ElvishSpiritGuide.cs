@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Initial;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Initial;
 
 public class ElvishSpiritGuide : ManaSource
 {
@@ -10,10 +6,10 @@ public class ElvishSpiritGuide : ManaSource
     {
         Name = "Elvish Spirit Guide";
         ShortName = "ESG";
-        Type = CardType.InitialMana;
+        Type = CardRole.InitialMana;
         Color = Color.Green;
-        Cost = Manacost.None;
-        Produces = new Manapool("G");
+        Cost = ManaValue.None;
+        Produces = new ManaPool("G");
 
         Priority = 1.0m;
     }

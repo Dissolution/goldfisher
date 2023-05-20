@@ -2,7 +2,7 @@
 
 namespace Jay.Goldfisher.Types;
 
-public class Manacost
+public class ManaValue
 {
 #region Fields
     protected readonly Dictionary<Color, int> _mana = new Dictionary<Color, int>();
@@ -47,9 +47,9 @@ public class Manacost
 #endregion
 
 #region Static Properties
-    public static Manacost None
+    public static ManaValue None
     {
-        get { return new Manacost();}
+        get { return new ManaValue();}
     }
 #endregion
 
@@ -57,7 +57,7 @@ public class Manacost
     /// <summary>
     /// Create a new, empty, mana cost
     /// </summary>
-    public Manacost()
+    public ManaValue()
     {
         //Setup dictionary
         foreach (var color in Enum.GetValues(typeof(Color)))
@@ -70,7 +70,7 @@ public class Manacost
     /// Create a manacost from a text representation
     /// </summary>
     /// <param name="cost"></param>
-    public Manacost(string cost)
+    public ManaValue(string cost)
         : this()
     {
         cost = cost.ToUpper();

@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
 
 public class TinderWall : ManaSource
 {
@@ -10,10 +6,10 @@ public class TinderWall : ManaSource
     {
         Name = "Tinder Wall";
         ShortName = "Tinder";
-        Type = CardType.Ramp;
+        Type = CardRole.Ramp;
         Color = Color.Green;
-        Cost = new Manacost("G");
-        Produces = new Manapool("RR");
+        Cost = new ManaValue("G");
+        Produces = new ManaPool("RR");
 
         Priority = 2.0m;
     }

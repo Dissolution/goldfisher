@@ -1,9 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Extensions;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Initial;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Initial;
 
 public class ChromeMox : ManaSource
 {
@@ -11,10 +6,10 @@ public class ChromeMox : ManaSource
     {
         Name = "Chrome Mox";
         ShortName = "Mox";
-        Type = CardType.InitialMana;
+        Type = CardRole.InitialMana;
         Color = Color.None;
-        Cost = Manacost.None;
-        Produces = Manapool.Empty;      //Treat as if it produces nothing
+        Cost = ManaValue.None;
+        Produces = ManaPool.Empty;      //Treat as if it produces nothing
 
         Priority = 0.3m;     //Very early
     }

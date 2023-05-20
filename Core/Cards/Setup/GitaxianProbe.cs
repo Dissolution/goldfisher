@@ -1,9 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Extensions;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.Setup;
+﻿namespace Jay.Goldfisher.Cards.Setup;
 
 public class GitaxianProbe : Card
 {
@@ -11,9 +6,9 @@ public class GitaxianProbe : Card
     {
         Name = "Gitaxian Probe";
         ShortName = "Probe";
-        Type = CardType.Draw;
+        Type = CardRole.Draw;
         Color = Color.Blue;
-        Cost = Manacost.None;
+        Cost = ManaValue.None;
 
         Priority = 0.20m;
     }

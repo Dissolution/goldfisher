@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.Setup;
+﻿namespace Jay.Goldfisher.Cards.Setup;
 
 public class LandGrant : Card
 {
@@ -11,9 +7,9 @@ public class LandGrant : Card
     {
         Name = "Land Grant";
         ShortName = "Grant";
-        Type = CardType.InitialMana;
+        Type = CardRole.InitialMana;
         Color = Color.Green;
-        Cost = Manacost.None;
+        Cost = ManaValue.None;
 
         Priority = 0.4m;
     }

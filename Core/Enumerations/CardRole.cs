@@ -1,6 +1,6 @@
 ﻿namespace Jay.Goldfisher.Enumerations;
 
-public enum CardType
+public enum CardRole
 {
     None = 0,
     InitialMana,

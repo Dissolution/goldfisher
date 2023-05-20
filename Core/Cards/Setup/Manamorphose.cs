@@ -1,25 +1,22 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Extensions;
-using Jay.Goldfisher.Types;
+﻿using Jay.Goldfisher.Cards.ManaSources;
 
 namespace Jay.Goldfisher.Cards.Setup;
 
 public class Manamorphose : ManaSource
 {
-    private readonly Manacost _secondCost;
+    private readonly ManaValue _secondCost;
 
     public Manamorphose()
     {
         Name = "Manamorphose";
         ShortName = "MM";
-        Type = CardType.Draw;
+        Type = CardRole.Draw;
         Color = Color.Red | Color.Green;
 			
-        Cost = new Manacost("1R");
-        _secondCost = new Manacost("1G");
+        Cost = new ManaValue("1R");
+        _secondCost = new ManaValue("1G");
 
-        Produces = new Manapool("**");
+        Produces = new ManaPool("**");
 
         Priority = 2.1m;
     }

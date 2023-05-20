@@ -1,6 +1,6 @@
 ﻿namespace Jay.Goldfisher.Types;
 
-public class Manapool : Manacost
+public class ManaPool : ManaValue
 {
 #region Fields
 
@@ -34,20 +34,20 @@ public class Manapool : Manacost
 #endregion
 
 #region Static Properties
-    public static Manapool Empty
+    public static ManaPool Empty
     {
-        get { return new Manapool();}
+        get { return new ManaPool();}
     }
 #endregion
 
 #region Constructors
-    public Manapool()
+    public ManaPool()
         : base()
     {
         _baseColors = new[] {Color.White, Color.Blue, Color.Black, Color.Red, Color.Green};
     }
 
-    public Manapool(string mana)
+    public ManaPool(string mana)
         : base(mana)
     {
         _baseColors = new[] {Color.White, Color.Blue, Color.Black, Color.Red, Color.Green};
@@ -56,7 +56,7 @@ public class Manapool : Manacost
 #endregion
 
 #region Public Methods
-    public Manapool Add(Manapool manapool)
+    public ManaPool Add(ManaPool manapool)
     {
         _mana[Color.None] += manapool.Colorless;
         _mana[Color.White] += manapool.White;
@@ -68,13 +68,13 @@ public class Manapool : Manacost
         return this;
     }
 
-    public Manapool Add(string mana)
+    public ManaPool Add(string mana)
     {
-        var pool = new Manapool(mana);
+        var pool = new ManaPool(mana);
         return Add(pool);
     }
 
-    public Manapool Add(int amount, Color color)
+    public ManaPool Add(int amount, Color color)
     {
         if (amount < 0)
             throw new ArgumentOutOfRangeException("amount");
@@ -89,12 +89,12 @@ public class Manapool : Manacost
         return this;
     }
 
-    public Manapool Add(Color color)
+    public ManaPool Add(Color color)
     {
         return Add(1, color);
     }
 
-    public Manapool Subtract(Manapool manapool)
+    public ManaPool Subtract(ManaPool manapool)
     {
         _mana[Color.None] -= manapool.Colorless;
         _mana[Color.White] -= manapool.White;
@@ -106,13 +106,13 @@ public class Manapool : Manacost
         return this;
     }
 
-    public Manapool Subtract(string mana)
+    public ManaPool Subtract(string mana)
     {
-        var pool = new Manapool(mana);
+        var pool = new ManaPool(mana);
         return Subtract(pool);
     }
 
-    public bool CanPay(Manacost manacost)
+    public bool CanPay(ManaValue manacost)
     {
         //Check individual colors + any
         return Total >= manacost.Total &&
@@ -123,7 +123,7 @@ public class Manapool : Manacost
             Green + Any >= manacost.Green;
     }
 
-    public Manapool Pay(Manacost manacost)
+    public ManaPool Pay(ManaValue manacost)
     {
         //Pay for colors from that color or any
         foreach (var color in _baseColors)
@@ -185,9 +185,9 @@ public class Manapool : Manacost
         return this;
     }
 
-    public Manapool Copy()
+    public ManaPool Copy()
     {
-        return new Manapool(ToString());
+        return new ManaPool(ToString());
     }
 
 #endregion

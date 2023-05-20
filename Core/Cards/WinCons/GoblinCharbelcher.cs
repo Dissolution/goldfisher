@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.WinCons;
+﻿namespace Jay.Goldfisher.Cards.WinCons;
 
 public class GoblinCharbelcher : Card
 {
@@ -10,9 +6,9 @@ public class GoblinCharbelcher : Card
     {
         Name = "Goblin Charbelcher";
         ShortName = "Belcher";
-        Type = CardType.WinCon;
+        Type = CardRole.WinCon;
         Color = Color.None;
-        Cost = new Manacost("4");
+        Cost = new ManaValue("4");
 
         Priority = 3.2m;		//WinCon
     }

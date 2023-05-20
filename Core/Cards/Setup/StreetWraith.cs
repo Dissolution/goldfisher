@@ -1,9 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Extensions;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.Setup;
+﻿namespace Jay.Goldfisher.Cards.Setup;
 
 public class StreetWraith : Card
 {
@@ -11,9 +6,9 @@ public class StreetWraith : Card
     {
         Name = "Street Wraith";
         ShortName = "SW";
-        Type = CardType.Draw;
+        Type = CardRole.Draw;
         Color = Color.Black;
-        Cost = Manacost.None;
+        Cost = ManaValue.None;
 
         Priority = 0.2m;
     }

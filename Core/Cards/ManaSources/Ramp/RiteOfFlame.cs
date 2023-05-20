@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
 
 public class RiteOfFlame : ManaSource
 {
@@ -10,10 +6,10 @@ public class RiteOfFlame : ManaSource
     {
         Name = "Rite of Flame";
         ShortName = "Rite";
-        Type = CardType.Ramp;
+        Type = CardRole.Ramp;
         Color = Color.Red;
-        Cost = new Manacost("R");
-        Produces = new Manapool("RR");      //Could be more
+        Cost = new ManaValue("R");
+        Produces = new ManaPool("RR");      //Could be more
 
         Priority = 2.2m;
     }

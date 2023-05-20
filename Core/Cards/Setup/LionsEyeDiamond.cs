@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.Setup;
+﻿namespace Jay.Goldfisher.Cards.Setup;
 
 public class LionsEyeDiamond : Card
 {
@@ -10,9 +6,9 @@ public class LionsEyeDiamond : Card
     {
         Name = "Lion's Eye Diamond";
         ShortName = "LED";
-        Type = CardType.Ramp;
+        Type = CardRole.Ramp;
         Color = Color.None;
-        Cost = Manacost.None;
+        Cost = ManaValue.None;
 
         Priority = 0.5m;
     }

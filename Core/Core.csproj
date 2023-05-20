@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net7.0;netstandard2.1;net48</TargetFrameworks>
+        <!--<TargetFrameworks>net7.0;netstandard2.1;net48</TargetFrameworks>-->
+        <TargetFramework>net7.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -17,16 +18,20 @@
         <Content Include="Notes\Priority.txt" />
     </ItemGroup>
 
-    <ItemGroup>
+    <!--<ItemGroup>
         <PackageReference Include="PolySharp" Version="1.13.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-    </ItemGroup>
+    </ItemGroup>-->
 
     <ItemGroup>
         <Using Include="Jay.Goldfisher.Extensions" />
-        <Using Include="System.Net" />
-        <Using Include="System.Net.Http" />    </ItemGroup>
+        <Using Include="Jay.Goldfisher.Enumerations" />
+        <Using Include="Jay.Goldfisher.Types" />
+        <Using Include="Jay.Goldfisher.Cards" />
+        <Using Include="System.Diagnostics.CodeAnalysis" />
+        <Using Include="System.Numerics" />
+    </ItemGroup>
 
 </Project>

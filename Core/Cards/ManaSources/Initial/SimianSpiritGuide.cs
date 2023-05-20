@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Initial;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Initial;
 
 public class SimianSpiritGuide : ManaSource
 {
@@ -10,10 +6,10 @@ public class SimianSpiritGuide : ManaSource
     {
         Name = "Simian Spirit Guide";
         ShortName = "SSG";
-        Type = CardType.InitialMana;
+        Type = CardRole.InitialMana;
         Color = Color.Red;
-        Cost = Manacost.None;
-        Produces = new Manapool("R");
+        Cost = ManaValue.None;
+        Produces = new ManaPool("R");
 
         Priority = 1.0m;
     }

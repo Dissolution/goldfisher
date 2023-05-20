@@ -1,9 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Extensions;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.WinCons;
+﻿namespace Jay.Goldfisher.Cards.WinCons;
 
 public class EmptyTheWarrens : Card
 {
@@ -11,9 +6,9 @@ public class EmptyTheWarrens : Card
     {
         Name = "Empty the Warrens";
         ShortName = "Empty";
-        Type = CardType.WinCon;
+        Type = CardRole.WinCon;
         Color = Color.Red;
-        Cost = new Manacost("3R");
+        Cost = new ManaValue("3R");
 
         Priority = 3.0m;		//WinCon
     }
@@ -29,7 +24,7 @@ public class EmptyTheWarrens : Card
 
         //Override if we have Burninc Wish and 6 mana (better storm)
         if (boardState.Hand.Any(c => c.Name == "Burning Wish") &&
-            boardState.Manapool.CanPay(new Manacost("1R")) &&
+            boardState.Manapool.CanPay(new ManaValue("1R")) &&
             boardState.Manapool.Total + boardState.LedMana >= 6)
             return false;
 

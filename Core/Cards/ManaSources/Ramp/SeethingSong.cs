@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
+﻿namespace Jay.Goldfisher.Cards.ManaSources.Ramp;
 
 public class SeethingSong : ManaSource
 {
@@ -10,10 +6,10 @@ public class SeethingSong : ManaSource
     {
         Name = "Seething Song";
         ShortName = "Song";
-        Type = CardType.Ramp;
+        Type = CardRole.Ramp;
         Color = Color.Red;
-        Cost = new Manacost("2R");
-        Produces = new Manapool("RRRRR");
+        Cost = new ManaValue("2R");
+        Produces = new ManaPool("RRRRR");
 
         Priority = 2.4m;
     }

@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
-using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Extensions;
-using Jay.Goldfisher.Types;
+
+using Jay.Goldfisher.Cards.ManaSources;
 
 namespace Jay.Goldfisher.Fishers;
 
@@ -17,7 +15,7 @@ public class DefaultFisher
         //Win Con Type, # of that type (damage/tokens), times happened
         var results = new List<Tuple<WinConditionType, int, BoardState>>();
 
-        const int sims = 100000;
+        const int sims = 1;
 
         var timer = Stopwatch.StartNew();
 
@@ -88,7 +86,7 @@ public class DefaultFisher
                         state.Manapool.Add(state.LedMana, Color.Any);
                         state.LedMana = 0;
                     }
-                    state.Manapool.Pay(new Manacost("3"));
+                    state.Manapool.Pay(new ManaValue("3"));
 						
                     //Calculate damage
                     var index = state.Library.FindIndex(c => c.Name == "Taiga");
@@ -156,7 +154,7 @@ public class DefaultFisher
     /// </summary>
     /// <param name="boardState"></param>
     /// <returns></returns>
-    private Manapool DoRamp(BoardState boardState)
+    private ManaPool DoRamp(BoardState boardState)
     {
         var state = boardState.Copy();
         var skip = 0;
@@ -208,7 +206,7 @@ public class DefaultFisher
         while (state.Hand.Any())
         {
             //Check 1 - Does the hand have a win condition?
-            if (state.Hand.All(h => h.Type != CardType.WinCon))
+            if (state.Hand.All(h => h.Type != CardRole.WinCon))
             {
                 state.Mulligan("No win cons");
                 continue;

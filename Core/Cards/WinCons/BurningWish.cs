@@ -1,8 +1,4 @@
-﻿using Jay.Goldfisher.Cards.Base;
-using Jay.Goldfisher.Enumerations;
-using Jay.Goldfisher.Types;
-
-namespace Jay.Goldfisher.Cards.WinCons;
+﻿namespace Jay.Goldfisher.Cards.WinCons;
 
 public class BurningWish : Card
 {
@@ -10,9 +6,9 @@ public class BurningWish : Card
     {
         Name = "Burning Wish";
         ShortName = "Wish";
-        Type = CardType.WinCon;
+        Type = CardRole.WinCon;
         Color = Color.Red;
-        Cost = new Manacost("1R");
+        Cost = new ManaValue("1R");
 
         Priority = 3.1m;		//WinCon
     }
